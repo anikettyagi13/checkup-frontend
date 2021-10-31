@@ -1,0 +1,44 @@
+.video {
+  height: 80vh;
+  width: 95vw;
+  object-fit: fill;
+  margin: 30px;
+  border-radius: 10px;
+}
+.videoContainer {
+  /* background-color: #c3c3c3; */
+  border-radius: 5px;
+  /* box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19); */
+}
+.moreIcons {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* padding: 10px; */
+  background-color: white;
+  width: 200px !important;
+  border-radius: 20px;
+  height: 50px;
+  /* width: 200px !important; */
+}
+.myVideo {
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  border-radius: 10px !important;
+  bottom: 90px;
+  right: 50px;
+}
+.Ringing {
+  height: 100px;
+  width: 300px !important;
+  padding: 20px;
+  background-color: white;
+  top: 100px;
+  z-index: 20;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+}

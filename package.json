@@ -1,0 +1,55 @@
+{
+  "name": "hospital_app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@azure/storage-blob": "^12.8.0",
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/lab": "^5.0.0-alpha.50",
+    "@mui/material": "^5.0.3",
+    "@syncfusion/ej2-react-calendars": "^19.3.46",
+    "@syncfusion/ej2-react-dropdowns": "^19.3.46",
+    "@syncfusion/ej2-react-schedule": "^19.3.44",
+    "animejs": "^3.2.1",
+    "axios": "^0.22.0",
+    "cra-template": "1.1.2",
+    "dotenv": "^10.0.0",
+    "moment": "^2.29.1",
+    "msal": "^1.4.14",
+    "playyjs": "^1.0.5",
+    "react": "^17.0.2",
+    "react-aad-msal": "^2.3.5",
+    "react-dom": "^17.0.2",
+    "react-image-crop": "^9.0.4",
+    "react-pdf": "^5.4.0",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.3",
+    "socket.io-client": "^4.3.2",
+    "web-vitals": "^2.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

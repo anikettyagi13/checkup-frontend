@@ -1,0 +1,98 @@
+.coverProfile {
+  height: 350px;
+  background-color: #e0e0e0;
+}
+.profilePicContainer {
+  height: 150px;
+  margin-top: -75px !important;
+  width: 150px !important;
+  margin-left: 30px !important;
+  background-color: #007da3;
+  border-radius: 5px;
+}
+.profileName {
+  margin-left: 200px !important;
+  margin-top: -70px !important;
+}
+.profileBio {
+  margin: 20px 30px !important;
+}
+.profileAction {
+  position: absolute;
+  right: 30px;
+  margin-top: 30px !important;
+  width: 200px;
+  /* margin: auto !important; */
+}
+.profilePic {
+  height: 120px;
+  width: 120px !important;
+  background-color: rgb(206, 206, 202);
+  border-radius: 15px;
+}
+.profilePicSettings {
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 15px;
+}
+
+.profileBlock {
+  height: 200px;
+  margin-left: 30px !important;
+  align-items: center !important;
+}
+.timelineBlock {
+  height: 250px;
+  margin-right: 20px !important;
+  padding: 10px;
+  align-items: center;
+  border-radius: 10px;
+}
+.profileBio {
+  width: 90% !important;
+  justify-content: center !important;
+  border-radius: 10px;
+  margin-top: 10 !important;
+  font-family: 'poppins';
+  padding: 10px;
+  font-size: 16px;
+}
+.profileBio:focus {
+  text-decoration: none;
+  border-color: #007da3;
+}
+
+@media (max-width: 640px) {
+  .profilePicContainer {
+    margin: auto !important;
+    margin-top: -75px !important;
+  }
+  .profileName {
+    margin: 0px !important;
+  }
+  .profileAction {
+    position: relative !important;
+    right: 0px !important;
+    /* margin-top: 30px !important; */
+    width: 200px;
+    margin: auto !important;
+  }
+  .profileName1 {
+    justify-content: center !important;
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+  }
+  .profileBlock {
+    justify-content: center !important;
+    /* margin: auto !important; */
+    margin: 20px !important;
+    width: 100% !important;
+  }
+  .timelineBlock {
+    margin: 0px !important;
+    margin-top: 70px !important;
+  }
+  .coverProfile {
+    height: 300px;
+  }
+}

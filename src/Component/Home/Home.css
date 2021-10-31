@@ -1,0 +1,61 @@
+.first_screen {
+  margin-top: 50px !important;
+}
+.screen {
+  margin-top: 100px !important;
+}
+.doctor_checking {
+  width: 50%;
+  /* position: absolute; */
+  /* left: 50; */
+  transform: translateX(50%);
+}
+.screenImage {
+  width: 90%;
+  display: block;
+  margin: auto;
+  margin-bottom: 40px;
+}
+.CheckupText {
+  position: absolute;
+}
+.hideWhenSmall {
+  display: block;
+}
+.showWhenSmall {
+  display: none;
+}
+.hidden {
+  opacity: 0;
+}
+
+@media (max-width: 900px) {
+  .screenImage {
+    width: 60%;
+  }
+  .hideWhenSmall {
+    display: none;
+  }
+  .showWhenSmall {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .doctor_checking {
+    width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .CheckupText {
+    position: relative;
+  }
+  .first_screen {
+    margin-top: 70px !important;
+  }
+  .screenImage {
+    width: 100%;
+  }
+}
