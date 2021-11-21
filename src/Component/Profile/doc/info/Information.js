@@ -21,6 +21,7 @@ export default function Information({
       item
       xs={12}
       justify="space-between"
+      align-items="center"
       style={{ marginTop: '20px' }}
     >
       <InfoMain

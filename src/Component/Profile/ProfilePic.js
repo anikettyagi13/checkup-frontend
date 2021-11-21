@@ -1,4 +1,5 @@
 import { Button, Grid } from '@material-ui/core'
+import Loading from '../../utils/Loading'
 
 export default function ProfilePic({
   previewImage,
@@ -7,6 +8,7 @@ export default function ProfilePic({
   fileUpload,
   profileClick,
   type,
+  profileLoading,
   profileUploaded,
 }) {
   return (
@@ -56,6 +58,18 @@ export default function ProfilePic({
                   className="profilePicSettings"
                   alt="profile"
                 ></img>
+                {profileLoading ? (
+                  <div
+                    className="profilePicSettings"
+                    style={{
+                      backgroundColor: '#0000009e',
+                      position: 'absolute',
+                      marginTop: '-124px',
+                    }}
+                  >
+                    <Loading width="150" stroke="6" />
+                  </div>
+                ) : null}
                 <Grid
                   item
                   style={{
@@ -64,28 +78,30 @@ export default function ProfilePic({
                     left: '120px',
                   }}
                 >
-                  <div
-                    style={{
-                      padding: '10px',
-                      backgroundColor: '#FDFCDC',
-                      borderRadius: '20px',
-                      width: '10px',
-                      height: '10px',
-                      display: 'grid',
-                      justify: 'center',
-                      alignContent: 'center',
-                    }}
-                    onClick={profileClick}
-                  >
-                    <img
+                  {!profileLoading ? (
+                    <div
                       style={{
-                        marginTop: '2px',
-                        marginLeft: '-1px',
+                        padding: '10px',
+                        backgroundColor: '#FDFCDC',
+                        borderRadius: '20px',
+                        width: '10px',
+                        height: '10px',
+                        display: 'grid',
+                        justify: 'center',
+                        alignContent: 'center',
                       }}
-                      src="https://img.icons8.com/material-rounded/12/000000/edit--v2.png"
-                      alt="profile"
-                    />
-                  </div>
+                      onClick={profileClick}
+                    >
+                      <img
+                        style={{
+                          marginTop: '2px',
+                          marginLeft: '-1px',
+                        }}
+                        src="https://img.icons8.com/material-rounded/12/000000/edit--v2.png"
+                        alt="profile"
+                      />
+                    </div>
+                  ) : null}
                 </Grid>
                 {previewImage && !profileUploaded ? (
                   <Grid

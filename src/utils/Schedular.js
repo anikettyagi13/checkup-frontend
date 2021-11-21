@@ -43,6 +43,10 @@ export default function Schedular({
             session_id: localStorage.getItem('session_id'),
           }
           await apiRequest('post', '/api/create_appointment', fake, body)
+          await apiRequest('post', '/api/add_availability', () => {}, {
+            session_id: localStorage.getItem('session_id'),
+            doc_id: doc_id,
+          })
         }
       })
     }

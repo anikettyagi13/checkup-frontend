@@ -22,8 +22,8 @@ export default function InfoMain({
       className="profileBlock"
       // style={{ backgroundColor: 'pink' }}
     >
-      <Grid item xs={12}>
-        <Typography variant="h3">Information</Typography>
+      <Grid item xs={12} className="center">
+        <Typography className="h3">Information</Typography>
         {type === 'edit' ? (
           <TextField
             label="hospital/clinic"
@@ -33,7 +33,7 @@ export default function InfoMain({
             onChange={(e) => setHospital(e.target.value)}
           />
         ) : (
-          <Typography variant="body1">Hospital/Clinic-: {hospital}</Typography>
+          <Typography className="body">Hospital/Clinic-: {hospital}</Typography>
         )}
         {type === 'edit' ? (
           <Grid item xs={12}>
@@ -47,10 +47,10 @@ export default function InfoMain({
             />
           </Grid>
         ) : (
-          <Typography variant="body1">Fees-: {fees}</Typography>
+          <Typography className="body">Fees-: {fees}</Typography>
         )}
         {type === 'edit' ? null : (
-          <Typography variant="body1">Patients Treated -: {}</Typography>
+          <Typography className="body">Patients Treated -: {}</Typography>
         )}
         {type === 'edit' ? (
           <>
@@ -61,12 +61,12 @@ export default function InfoMain({
               value={treatment}
               onChange={(e) => setTreatment(e.target.value)}
             />
-            <Typography variant="subtitle1">
+            <Typography className="subtitle1">
               Comma seprated Treatments 5 allowed
             </Typography>
           </>
         ) : (
-          <Typography variant="body1">Treatment: {treatment}</Typography>
+          <Typography className="body">Treatment: {treatment}</Typography>
         )}
       </Grid>
     </Grid>

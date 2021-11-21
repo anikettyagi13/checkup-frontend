@@ -8,25 +8,42 @@ import Home from '../Component/Home/Home'
 import Login from '../Component/Credentials'
 import NavBar from '../Component/NavBar'
 import Profile from '../Component/Profile/Profile'
-import Signup from '../Component/Signup'
+import Search from '../Component/Search/Search'
 
-export default function Navigation({ user, setUser, message, AppointmentRef }) {
+export default function Navigation({
+  user,
+  setUser,
+  message,
+  AppointmentRef,
+  setLoading,
+}) {
+  console.log(user, 'afjalsdkjfiladsjf;adsjf;aj###')
   const [appointment, setAppointment] = useState([])
   return (
     <>
       <NavBar user={user} setUser={setUser} />
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" render={(props) => <Home user={user} />} />
         <Route
           path="/login"
           render={(props) => (
-            <Login user={user} setUser={setUser} type="login" />
+            <Login
+              user={user}
+              setUser={setUser}
+              type="login"
+              setLoading={setLoading}
+            />
           )}
         />
         <Route
           path="/signup"
           render={(props) => (
-            <Login user={user} setUser={setUser} type="signup" />
+            <Login
+              user={user}
+              setUser={setUser}
+              type="signup"
+              setLoading={setLoading}
+            />
           )}
         />
         <Route

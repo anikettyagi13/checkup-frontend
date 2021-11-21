@@ -27,8 +27,10 @@ export default function Bio({ bio, setBio, type }) {
           />
         </Grid>
       ) : (
-        <Grid item xs={12} style={{ margin: '20px 30px' }}>
-          <Typography variant="h6">{bio}</Typography>
+        <Grid item xs={12} style={{ margin: '30px 50px' }}>
+          <Typography className="h6" style={{ fontWeight: 600 }}>
+            {bio}
+          </Typography>
         </Grid>
       )}
     </Grid>

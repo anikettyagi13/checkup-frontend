@@ -8,8 +8,9 @@ import React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 
 import theme from './Theme'
-import { Button } from '@material-ui/core'
-import { BrowserRouter, Link } from 'react-router-dom'
+import { Button, Grid } from '@material-ui/core'
+import { BrowserRouter, Link, NavLink } from 'react-router-dom'
+import Loading from './utils/Loading'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -20,13 +21,15 @@ require('dotenv').config({ path: '../.env' })
 let u = {}
 
 function App() {
+  const path = window.location.href
   const [open, setOpen] = useState(false)
   const [message, setMessage] = useState({ action: {} })
   const [value, changes] = useState({})
   const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(true)
   const AppointmentRef = createRef()
   useEffect(() => {
-    if (user.type) {
+    if (user && user.type) {
       u = user
       socket.emit('new_id', user)
       socket.on('notification', (data) => {
@@ -43,8 +46,10 @@ function App() {
 
   useEffect(() => {
     if (value.data) setUser(value.data)
+    setLoading(false)
   }, [value])
   useEffect(() => {
+    setLoading(true)
     async function apis() {
       await apiRequest('post', '/api', changes, {
         session_id: localStorage.getItem('session_id'),
@@ -104,13 +109,26 @@ function App() {
             </Alert>
           )}
         </Snackbar>
-        <Navigation
-          user={user}
-          setUser={setUser}
-          socket={socket}
-          AppointmentRef={AppointmentRef}
-          message={message}
-        />
+        {loading ? (
+          <Grid
+            style={{
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: '#1F4F6B',
+            }}
+          >
+            <Loading width="300" />
+          </Grid>
+        ) : (
+          <Navigation
+            user={user}
+            setUser={setUser}
+            socket={socket}
+            AppointmentRef={AppointmentRef}
+            message={message}
+          />
+        )}
+
         {message.action ? (
           <Link ref={AppointmentRef} to={`${message.action.pathName}`} />
         ) : null}

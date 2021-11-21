@@ -43,7 +43,7 @@ export default function Communication({ properties, user }) {
   const [appointment, setAppointment] = useState(
     properties.location.appointment ? properties.location.appointment : {},
   )
-
+  const [userInfo, setUserInfo] = useState({})
   const [value, changes] = useState()
   const [error, setError] = useState('')
   const [open, setOpen] = useState(false)
@@ -69,13 +69,29 @@ export default function Communication({ properties, user }) {
   let startVideoButton = createRef()
   let stopVideoButton = createRef()
   let connectedLabel = createRef()
-  const [ringing, setRinging] = useState(false)
+  const [ringing1, setRinging1] = useState(false)
   async function getAppointmentInfo() {
     await apiRequest('post', '/api/get_appointment_info', changes, {
       session_id: localStorage.getItem('session_id'),
       id: properties.location.pathname.split('/')[2],
     })
   }
+  useEffect(() => {
+    return async function cleanup() {
+      try {
+        // const video = document.getElementById('video-ref')
+        if (video) {
+          const stream = video.srcObject
+          const tracks = stream.getTracks()
+          tracks.forEach(function (track) {
+            track.stop()
+          })
+        } else {
+          await call.stopVideo()
+        }
+      } catch (e) {}
+    }
+  }, [])
   async function getToken(appointment) {
     console.log(appointment)
     let body = {
@@ -165,31 +181,43 @@ export default function Communication({ properties, user }) {
   useEffect(() => {
     if (selfToken.token) intializeCallFunction()
   }, [selfToken])
+  function UserInfo(data) {
+    console.log(data)
+    if (data.data) {
+      setUserInfo(data.data)
+      setRinging1(true)
+    }
+  }
+  async function getUserInfo() {
+    await apiRequest('get', `/api/profile/${anotherToken.user_id}`, UserInfo)
+  }
   async function intializeCallFunction() {
     try {
       const callClient = new CallClient()
       let tokenCredential = new AzureCommunicationTokenCredential(
         selfToken.token.trim(),
       )
+      console.log(selfToken)
       deviceManager = await callClient.getDeviceManager()
       await deviceManager.askDevicePermission({ video: true })
       await deviceManager.askDevicePermission({ audio: true })
       callAgent = await callClient.createCallAgent(tokenCredential)
+      console.log(callAgent)
       // Set up a camera device to use.
 
       // Listen for an incoming call to accept.
       callAgent.on('incomingCall', async (args) => {
         try {
           incomingCall = args.incomingCall
-          setRinging(true)
-          setStartButtonDisabled(true)
+          await getUserInfo()
         } catch (error) {
           console.error(error)
         }
       })
       setStartButtonDisabled(false)
     } catch (error) {
-      setStartButtonDisabled(false)
+      setInfo('Some Error Occured! Reloading might help')
+      setInfoOpen(true)
       console.error(error.message)
     }
   }
@@ -234,6 +262,7 @@ export default function Communication({ properties, user }) {
         ? { localVideoStreams: [localVideoStream] }
         : undefined
       call = await incomingCall.accept({ videoOptions })
+      setRinging1(false)
       // Subscribe to the call's properties and events.
       subscribeToCall(call)
     } catch (error) {
@@ -244,7 +273,11 @@ export default function Communication({ properties, user }) {
     try {
       localVideoStreamRenderer = new VideoStreamRenderer(localVideoStream)
       const view = await localVideoStreamRenderer.createView()
-      document.getElementById('local_video_container').appendChild(view.target)
+      const ele = document.getElementById('local_video_container')
+      if (ele.childNodes.length === 0)
+        document
+          .getElementById('local_video_container')
+          .appendChild(view.target)
     } catch (error) {
       console.error(error)
     }
@@ -269,16 +302,11 @@ export default function Communication({ properties, user }) {
           setHangupButtonDisabled(false)
           setLocalVideo(false)
           console.log('yoooooo connected')
-          // startVideoButton.disabled = false
-          // stopVideoButton.disabled = false
         } else if (call.state === 'Disconnected') {
-          // connectedLabel.hidden = true
           setStartButtonDisabled(false)
           setHangupButtonDisabled(true)
           setLocalVideo(true)
-          console.log('yoooooo disconnect')
-          // startVideoButton.disabled = true
-          // stopVideoButton.disabled = true
+          setVideoOpen(false)
           console.log(
             `Call ended, call end reason={code=${call.callEndReason.code}, subCode=${call.callEndReason.subCode}}`,
           )
@@ -416,7 +444,6 @@ export default function Communication({ properties, user }) {
           const video = document.getElementById('video-ref')
           const stream = video.srcObject
           const tracks = stream.getTracks()
-
           tracks.forEach(function (track) {
             track.stop()
           })
@@ -462,8 +489,9 @@ export default function Communication({ properties, user }) {
       session_id: localStorage.getItem('session_id'),
       appointment: appointment,
     })
-    getVideo()
-    // setOpenHistory(true)
+    // getVideo()
+
+    setOpenHistory(true)
   }
   function fake() {}
   function handleClose() {
@@ -512,18 +540,18 @@ export default function Communication({ properties, user }) {
   }
   return (
     <Grid container style={{ backgroundColor: '#f5f5f5' }}>
-      {ringing ? (
+      {ringing1 ? (
         <AcceptCall
           AcceptButtonClick={AcceptButtonClick}
-          setRinging={setRinging}
+          setRinging={setRinging1}
+          user={userInfo}
         />
       ) : null}
-
       <BuildDailog
         open={openHistory}
         setOpen={setOpenHistory}
         saveChanges={() => fileUpload()}
-        title="Upload Patient's History"
+        title=""
       >
         <Grid container>
           <Grid
@@ -535,7 +563,6 @@ export default function Communication({ properties, user }) {
           >
             <Grid item xs={12} md={6}>
               <TextField
-                variant="contained"
                 label="name"
                 fullWidth
                 value={historyName}
@@ -573,6 +600,7 @@ export default function Communication({ properties, user }) {
           </Grid>
         </Grid>
       </BuildDailog>
+
       <Grid container>
         <Snackbar
           open={infoOpen}
@@ -619,57 +647,98 @@ export default function Communication({ properties, user }) {
       <Grid
         container
         item
-        justify="center"
+        justify="space-between"
         className="moreIcons"
         alignItems="center"
       >
-        <Grid item justify="center" alignItems="center" alignContent="center">
+        <Grid
+          item
+          container
+          justify="space-between"
+          justifyContent="space-between"
+          alignItems="center"
+          alignContent="center"
+        >
           <Button onClick={StartVideoClick} ref={startVideoButton}>
             {videoOpen ? (
-              <img src="https://img.icons8.com/ios/30/000000/no-video--v1.png" />
+              <div
+                style={{
+                  height: '40px',
+                  width: '40px',
+                  borderRadius: '20px',
+                  backgroundColor: '#ff3333',
+                  display: 'grid',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img src="https://img.icons8.com/ios/24/FFFFFF/no-video--v1.png" />
+              </div>
             ) : (
-              <img src="https://img.icons8.com/ios/30/000000/no-video--v2.png" />
+              <div
+                style={{
+                  height: '40px',
+                  width: '40px',
+                  borderRadius: '20px',
+                  backgroundColor: '#7EC9A6',
+                  display: 'grid',
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <img src="https://img.icons8.com/ios/24/FFFFFF/no-video--v2.png" />
+              </div>
             )}
           </Button>
-          {localVideo ? (
-            <Button onClick={StartButtonClick}>
-              {console.log(localVideo, 'localVideo')}
-              <img src="https://img.icons8.com/external-those-icons-lineal-those-icons/30/000000/external-call-mobile-telephone-those-icons-lineal-those-icons.png" />
+          {startButtonDisabled ? (
+            <Button>
+              <div class="loader"></div>
             </Button>
-          ) : user && user.type === 'doctor' ? (
-            <Button
-              ref={hangUpCallButton}
-              onClick={EndButtonClick}
-              type="button"
-              disabled={hangupButtonDisabled}
-            >
-              <img src="https://img.icons8.com/ios/30/000000/phone-disconnected.png" />
-            </Button>
-          ) : null}
-          {/* <button
-            ref={acceptCallButton}
-            onClick={AcceptButtonClick}
-            type="button"
-            disabled={acceptButtonDisabled}
-          >
-            Accept Call
-          </button>
-          <button
-            ref={stopVideoButton}
-            onClick={StopVideoClick}
-            type="button"
-            // disabled="true"
-          >
-            Stop Video
-          </button> */}
+          ) : (
+            <>
+              {localVideo ? (
+                <Button onClick={StartButtonClick}>
+                  {console.log(localVideo, 'localVideo')}
+                  <div
+                    style={{
+                      height: '40px',
+                      width: '40px',
+                      borderRadius: '20px',
+                      backgroundColor: '#7EC9A6',
+                      display: 'grid',
+                      alignContent: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="https://img.icons8.com/external-those-icons-fill-those-icons/24/FFFFFF/external-call-mobile-telephone-those-icons-fill-those-icons.png" />
+                  </div>
+                </Button>
+              ) : user && user.type === 'doctor' ? (
+                <Button
+                  ref={hangUpCallButton}
+                  onClick={EndButtonClick}
+                  type="button"
+                  disabled={hangupButtonDisabled}
+                >
+                  <div
+                    style={{
+                      height: '40px',
+                      width: '40px',
+                      borderRadius: '20px',
+                      backgroundColor: '#ff3333',
+                      display: 'grid',
+                      alignContent: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src="https://img.icons8.com/ios-glyphs/24/FFFFFF/phone-disconnected.png" />
+                  </div>
+                </Button>
+              ) : null}
+            </>
+          )}
         </Grid>
       </Grid>
-
-      <br />
-      <br />
-      <div ref={connectedLabel} hidden>
-        Call is connected!
-      </div>
     </Grid>
   )
 }

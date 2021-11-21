@@ -3,6 +3,7 @@ import { TextField } from '@mui/material'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import theme from '../../Theme'
+import Loading from '../../utils/Loading'
 
 export default function LoginMain({
   email,
@@ -10,6 +11,8 @@ export default function LoginMain({
   password,
   setPassword,
   LoginClick,
+  path,
+  buttonClick,
 }) {
   const [viewPassword, setViewPassword] = useState(false)
   return (
@@ -33,6 +36,7 @@ export default function LoginMain({
           label="Email"
           fullWidth
           value={email}
+          autoFocus
           variant="standard"
           onChange={(e) => setEmail(e.target.value)}
           InputProps={{
@@ -84,17 +88,21 @@ export default function LoginMain({
         <Button
           variant="contained"
           style={{
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: buttonClick
+              ? theme.palette.dark.main
+              : theme.palette.primary.main,
             color: 'white',
             padding: '10px 50px',
           }}
           onClick={LoginClick}
+          disabled={buttonClick}
         >
-          LOGIN
+          {buttonClick ? <Loading width="50" stroke="16" /> : <>Login</>}
         </Button>
       </Grid>
       <Typography style={{ marginTop: '15px' }} className="subtitle1">
-        Don't have an account with us? <Link to="/signup">Signup</Link>
+        Don't have an account with us?{' '}
+        <Link to={`/signup?path=${path}`}>Signup</Link>
       </Typography>
     </Grid>
   )

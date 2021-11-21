@@ -1,9 +1,12 @@
 import { Button, Grid, Typography } from '@material-ui/core'
+import { createRef } from 'react'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import img from '../../assets/add_history.svg'
 import theme from '../../Theme'
 
 export default function ThirdScreen() {
+  const ProfileRef = createRef(null)
   return (
     <Grid container item xs={12} alignItems="center">
       <Grid container item md={6} xs={12} justify="center">
@@ -58,11 +61,15 @@ export default function ThirdScreen() {
               //   width: '200px',
               color: 'white',
             }}
+            onClick={() => {
+              ProfileRef.current.click()
+            }}
           >
             Build Your Profile
           </Button>
         </Grid>
       </Grid>
+      <Link to={'/profile'} style={{ display: 'none' }} ref={ProfileRef} />
     </Grid>
   )
 }

@@ -1,7 +1,10 @@
 import { Button, Grid, Typography } from '@material-ui/core'
+import { createRef } from 'react'
+import { Link } from 'react-router-dom'
 import img from '../../assets/calender.svg'
 import theme from '../../Theme'
 export default function SecondScreen() {
+  const AppointmentRef = createRef(null)
   return (
     <Grid container item xs={12} alignItems="center">
       <Grid
@@ -39,12 +42,20 @@ export default function SecondScreen() {
               marginTop: '20px',
               color: 'white',
             }}
+            onClick={() => {
+              AppointmentRef.current.click()
+            }}
           >
             Schedule your first
             <br /> appointment
           </Button>
         </Grid>
       </Grid>
+      <Link
+        to={'/appointment?path=/'}
+        style={{ display: 'none' }}
+        ref={AppointmentRef}
+      />
     </Grid>
   )
 }

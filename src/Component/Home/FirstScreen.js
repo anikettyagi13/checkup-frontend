@@ -1,10 +1,16 @@
 import { Button, Grid, Typography } from '@material-ui/core'
+import { createRef } from 'react'
+import { useState } from 'react'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import img from '../../assets/doctor_checking.svg'
 import theme from '../../Theme'
 import { animateBlock } from './Animations'
 
-export default function FirstScreen() {
+export default function FirstScreen({ user, setInfo, setOpen }) {
+  const SignUpRef = createRef(null)
+  const [openInfo, setOpenInfo] = useState(false)
+
   return (
     <Grid
       container
@@ -39,10 +45,19 @@ export default function FirstScreen() {
             borderRadius: '100px',
             marginTop: '30px',
           }}
+          onClick={() => {
+            console.log(user)
+            if (!(user && user.user.type)) SignUpRef.current.click()
+            else {
+              setInfo('User Already Logged In!')
+              setOpen(true)
+            }
+          }}
         >
           Create your Account
         </Button>
       </Grid>
+      <Link to={'/signup?path=/'} style={{ display: 'none' }} ref={SignUpRef} />
     </Grid>
   )
 }

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { apiRequest } from '../../../utils/utils'
 
-export default function Availability({ avail }) {
+export default function Availability({ avail, deleteAvailbility }) {
   const [info, setInfo] = useState({})
   const [value, changes] = useState()
   useEffect(() => {
@@ -19,6 +19,7 @@ export default function Availability({ avail }) {
     }
     yo()
   }, [])
+
   return (
     <Grid container style={{ marginBottom: '10px' }}>
       <Grid container item xs={12}>
@@ -59,6 +60,7 @@ export default function Availability({ avail }) {
                   <img
                     src="https://img.icons8.com/ios-glyphs/24/000000/trash--v1.png"
                     alt="delete"
+                    onClick={deleteAvailbility}
                   />
                 </Grid>
               </>

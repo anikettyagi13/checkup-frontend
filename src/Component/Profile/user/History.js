@@ -6,6 +6,7 @@ import BuildDailog from '../../../utils/BuildDailog'
 import { apiRequest } from '../../../utils/utils'
 import Availability from './Availability'
 import HistoryUtils from './historyUnit'
+import image from '../../../assets/nada.svg'
 
 export default function History({ user, newHistory }) {
   const doc_id = localStorage.getItem('session_id')
@@ -47,11 +48,22 @@ export default function History({ user, newHistory }) {
       console.log(e)
     }
   }, [])
+  function deleted(i) {
+    const k = [...availability]
+    k.splice(i, 1)
+    setAvailability(k)
+  }
+  async function deleteAvailbility(i) {
+    await apiRequest('post', `/api/delete_availability`, () => deleted(i), {
+      avail: availability[i],
+      session_id: localStorage.getItem('session_id'),
+    })
+  }
   useEffect(() => {
     if (newHistory.length > 0) {
       const k = [...history]
-
-      k.unshift(newHistory)
+      k.unshift(newHistory[0])
+      console.log(k)
       setHistory(k)
     }
   }, [newHistory])
@@ -69,19 +81,39 @@ export default function History({ user, newHistory }) {
         {doc_id === user.user.id ? (
           <Button
             variant="contained"
-            style={{ backgroundColor: theme.palette.orange.main }}
+            style={{ backgroundColor: theme.palette.dark.main, color: 'white' }}
             onClick={() => setShowAvailability(!showAvailability)}
           >
             AVAILABLility
           </Button>
         ) : null}
       </Grid>
-      <BuildDailog open={showAvailability} setOpen={setShowAvailability}>
+      <BuildDailog
+        open={showAvailability}
+        setOpen={setShowAvailability}
+        title="Availability"
+      >
         {availability.length === 0 ? (
-          <p>NONE</p>
+          <img
+            src={image}
+            style={{
+              width: '50%',
+              margin: 'auto',
+              opacity: '0.7',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            alt="nothing"
+          />
         ) : (
-          availability.map((avail) => {
-            return <Availability avail={avail} />
+          availability.map((avail, i) => {
+            return (
+              <Availability
+                key={i}
+                avail={avail}
+                deleteAvailbility={() => deleteAvailbility(i)}
+              />
+            )
           })
         )}
       </BuildDailog>

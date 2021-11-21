@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react'
 import { apiRequest } from '../../utils/utils'
 import ProfileMain from './ProfileMain'
 import './profile.css'
+import { NavLink } from 'react-router-dom'
+import { createRef } from 'react'
+import { Grid } from '@material-ui/core'
+import Loading from '../../utils/Loading'
 export default function Profile({ user, setUser, type, url }) {
+  const [loading, setLoading] = useState(false)
+  const LoginRef = createRef()
   async function load() {
     if (type === 'info') {
       const id = window.location.href.split('/')[4]
@@ -23,6 +29,10 @@ export default function Profile({ user, setUser, type, url }) {
     load()
   }, [url])
   useEffect(() => {
+    console.log(user, 'users######################')
+    if (!(user && user.type && user.user.id)) {
+      LoginRef.current.click()
+    }
     load()
   }, [user])
   useState(() => {
@@ -42,8 +52,26 @@ export default function Profile({ user, setUser, type, url }) {
           loggedIn={user}
         />
       ) : (
-        <>{userInfo && userInfo.type ? userInfo.type === 'doctor' : null}</>
+        <Grid
+          container
+          justify="center"
+          alignContent="center"
+          style={{ height: '100vh' }}
+        >
+          <Loading width="300" />
+        </Grid>
       )}
+      <NavLink
+        to={`/login?path=${
+          type === 'profile'
+            ? '/profile'
+            : type === 'info'
+            ? `/info/${window.location.href.split('/')[4]}`
+            : '/edit-profile'
+        }`}
+        ref={LoginRef}
+        style={{ display: 'none' }}
+      />
     </>
   )
 }

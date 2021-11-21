@@ -5,17 +5,20 @@ import { Link, NavLink } from 'react-router-dom'
 import { apiRequest } from '../../utils/utils'
 import moment from 'moment'
 
-export default function AppointmentUtils({ appointment, User }) {
+export default function AppointmentUtils({ appointment, User, prev }) {
   const [user, setUser] = useState({})
   const [value, changes] = useState()
   const communicationRef = createRef()
   useEffect(() => {
     if (value && value.data) {
+      console.log(value.data)
       setUser(value.data)
     }
   }, [value])
   async function getUser() {
-    await apiRequest('get', `/api/profile/${appointment.user_id}`, changes)
+    if (User.type === 'patient')
+      await apiRequest('get', `/api/profile/${appointment.doc_id}`, changes)
+    else await apiRequest('get', `/api/profile/${appointment.user_id}`, changes)
   }
   useEffect(() => {
     getUser()
@@ -76,18 +79,51 @@ export default function AppointmentUtils({ appointment, User }) {
                   </Grid>
                 </Grid>
                 <Grid item xs={3}>
-                  {appointment.start ? (
-                    appointment.timestamp > new Date().getTime() &&
-                    new Date().getTime() + 1800000 > appointment.timestamp ? (
+                  {!prev ? (
+                    appointment.start ? (
+                      appointment.timestamp > new Date().getTime() &&
+                      new Date().getTime() + 1800000 > appointment.timestamp ? (
+                        <Button
+                          variant="contained"
+                          onClick={Start}
+                          style={
+                            !appointment.ended
+                              ? {
+                                  //   marginRight: '150px',
+                                  marginTop: '10px',
+                                  backgroundColor: '#2bff18',
+                                  color: 'white',
+                                }
+                              : {
+                                  //   marginRight: '150px',
+                                  marginTop: '10px',
+                                  backgroundColor: '#007da37a',
+                                  color: 'white',
+                                }
+                          }
+                          disabled={
+                            appointment.timestamp > new Date().getTime() &&
+                            new Date().getTime() + 1800000 >
+                              appointment.timestamp &&
+                            !appointment.ended
+                              ? false
+                              : true
+                          }
+                        >
+                          join
+                        </Button>
+                      ) : null
+                    ) : User && User.type !== 'patient' ? (
                       <Button
                         variant="contained"
                         onClick={Start}
                         style={
-                          !appointment.ended
+                          appointment.timestamp > new Date().getTime() &&
+                          new Date().getTime() + 1800000 > appointment.timestamp
                             ? {
                                 //   marginRight: '150px',
                                 marginTop: '10px',
-                                backgroundColor: '#2bff18',
+                                backgroundColor: '#007DA3',
                                 color: 'white',
                               }
                             : {
@@ -99,45 +135,14 @@ export default function AppointmentUtils({ appointment, User }) {
                         }
                         disabled={
                           appointment.timestamp > new Date().getTime() &&
-                          new Date().getTime() + 1800000 >
-                            appointment.timestamp &&
-                          !appointment.ended
+                          new Date().getTime() + 1800000 > appointment.timestamp
                             ? false
                             : true
                         }
                       >
-                        join
+                        Start
                       </Button>
                     ) : null
-                  ) : User && User.type !== 'patient' ? (
-                    <Button
-                      variant="contained"
-                      onClick={Start}
-                      style={
-                        appointment.timestamp > new Date().getTime() &&
-                        new Date().getTime() + 1800000 > appointment.timestamp
-                          ? {
-                              //   marginRight: '150px',
-                              marginTop: '10px',
-                              backgroundColor: '#007DA3',
-                              color: 'white',
-                            }
-                          : {
-                              //   marginRight: '150px',
-                              marginTop: '10px',
-                              backgroundColor: '#007da37a',
-                              color: 'white',
-                            }
-                      }
-                      disabled={
-                        appointment.timestamp > new Date().getTime() &&
-                        new Date().getTime() + 1800000 > appointment.timestamp
-                          ? false
-                          : true
-                      }
-                    >
-                      Start
-                    </Button>
                   ) : null}
                 </Grid>
               </Grid>
@@ -183,6 +188,7 @@ export default function AppointmentUtils({ appointment, User }) {
                         height: '40px',
                         width: '40px',
                       }}
+                      alt=""
                     ></img>
                   </Grid>
                   <Grid item style={{ marginLeft: '20px' }}>

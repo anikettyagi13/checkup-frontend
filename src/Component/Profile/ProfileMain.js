@@ -17,6 +17,7 @@ import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
 import { useEffect } from 'react'
 import Book from './user/Book'
+import Loading from '../../utils/Loading'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
@@ -30,6 +31,9 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
   const url = u.length === 4 ? 'profile' : u[4]
   const [openHistory, setOpenHistory] = useState(false)
   const [file, setFile] = useState()
+  const [saveLoading, setSaveLoading] = useState(false)
+  const [coverLoading, setCoverLoading] = useState(false)
+  const [profileLoading, setProfileLoading] = useState(false)
   const [fileType, setFileType] = useState('')
   const [profilePreview, setProfilePreview] = useState()
   const [previewImage, setPreviewImage] = useState(false)
@@ -84,21 +88,17 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
     if (k === 'yo') {
       profileActionRef.current.click()
     } else if (k === 'save') {
-      saveProfile()
-      showProfileRef.current.click()
+      saveProfile(this)
+      setSaveLoading(true)
     } else if (url === 'profile' && user.type === 'patient')
       setOpenHistory(true)
     else if (url === 'profile' && type !== 'edit') {
       profileActionRef.current.click()
     } else if (url === 'profile' && type === 'edit') {
-      saveProfile()
-      showProfileRef.current.click()
+      saveProfile(this)
+      setSaveLoading(true)
     } else if (type === 'info' && user.type === 'doctor') {
       setOpenBooking(true)
-      // await apiRequest('post', '/api/add_availability', fake, {
-      //   session_id: localStorage.getItem('session_id'),
-      //   doc_id: user.user.id,
-      // })
     }
   }
   useEffect(() => {
@@ -133,22 +133,22 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
     coverRef.current.click()
   }
   function useless() {}
-  async function saveProfile() {
+  const saveProfile = async (ref) => {
+    console.log(ref)
     const u = { ...user }
-    console.log(treatment)
     u.user['hospital'] = hospital
     u.user['bio'] = bio
     u.user['treatment1'] = treatment.split(',')[0]
-      ? treatment.split(',')[0]
+      ? treatment.split(',')[0].toLowerCase().trim()
       : ''
     u.user['treatment2'] = treatment.split(',')[1]
-      ? treatment.split(',')[1]
+      ? treatment.split(',')[1].toLowerCase().trim()
       : ''
     u.user['treatment3'] = treatment.split(',')[2]
-      ? treatment.split(',')[2]
+      ? treatment.split(',')[2].toLowerCase().trim()
       : ''
     u.user['treatment4'] = treatment.split(',')[3]
-      ? treatment.split(',')[3]
+      ? treatment.split(',')[3].toLowerCase().trim()
       : ''
     u.user['fees'] = fees
     u.user['days'] = days
@@ -159,6 +159,8 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
     u.session_id = localStorage.getItem('session_id')
     setUser(u)
     await apiRequest('post', '/api/update_profile', useless, u)
+    setSaveLoading(false)
+    document.getElementById('to_profile').click()
   }
   function onFileChange(e, typ) {
     try {
@@ -199,7 +201,9 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
       ] = `https://${storageAccount}.blob.core.windows.net/${user.user.id}/${id}.PNG`
       setUser(u)
       setCoverUploaded(true)
+      setCoverLoading(true)
       await uploadFile(cover, id, 'PNG', user.user.id)
+      setCoverLoading(false)
       return
     }
     if (type === 'profile') {
@@ -209,10 +213,19 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
       ] = `https://${storageAccount}.blob.core.windows.net/${user.user.id}/${id}.PNG`
       setUser(u)
       setProfileUploaded(true)
+      setProfileLoading(true)
       await uploadFile(file, id, 'PNG', user.user.id)
+      setProfileLoading(false)
       return
     } else {
-      if (historyName === '' || historyName === '') {
+      if (
+        historyName === '' ||
+        historyName === '' ||
+        historyFile === undefined
+      ) {
+        setError({ error: 'Invalid Input Details' })
+        setOpenSnackbar(true)
+        return
       }
       console.log(id, user)
       await uploadFile(historyFile, id, 'pdf', user.user.id)
@@ -322,6 +335,7 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
           user={user}
           setUser={setUser}
           type={type}
+          coverLoading={coverLoading}
           coverClick={coverClick}
           previewCoverImage={previewCoverImage}
           fileUpload={fileUpload}
@@ -333,6 +347,7 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
             user={user}
             profileClick={profileClick}
             previewImage={previewImage}
+            profileLoading={profileLoading}
             fileUpload={fileUpload}
             profilePreview={profilePreview}
             type={type}
@@ -349,7 +364,7 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
               {user && user.user && user.user.name ? (
                 <>
                   <Grid item>
-                    <Typography variant="h3" style={{ fontWeight: '700' }}>
+                    <Typography className="h4" style={{ fontWeight: '500' }}>
                       {user.user.name}
                     </Typography>
                   </Grid>
@@ -371,7 +386,10 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
                 </Grid>
               ) : (
                 <Grid item>
-                  <Typography variant="h6" style={{ fontWeight: '600' }}>
+                  <Typography
+                    className="subtitle1"
+                    style={{ fontWeight: '600' }}
+                  >
                     {degrees}
                   </Typography>
                 </Grid>
@@ -383,13 +401,25 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
               <Button
                 fullWidth
                 variant="contained"
-                style={{
-                  backgroundColor: theme.palette.orange.main,
-                  // color: 'white',
-                }}
+                disabled={saveLoading}
+                style={
+                  !saveLoading
+                    ? {
+                        backgroundColor: theme.palette.primary.main,
+                        color: 'white',
+                      }
+                    : {
+                        backgroundColor: theme.palette.dark.main,
+                        color: 'white',
+                      }
+                }
                 onClick={() => profileAction('save')}
               >
-                SAVE
+                {saveLoading ? (
+                  <Loading width="50" color="#FFF" stroke="10" />
+                ) : (
+                  <>save</>
+                )}
               </Button>
             </Grid>
           ) : (
@@ -400,8 +430,9 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
                     fullWidth
                     variant="contained"
                     style={{
-                      backgroundColor: theme.palette.orange.main,
-                      // color: 'white',
+                      backgroundColor: theme.palette.primary.main,
+                      color: 'white',
+                      zIndex: '100',
                     }}
                     onClick={profileAction}
                   >
@@ -415,17 +446,14 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
               )}
 
               {user.type === 'patient' && type === 'profile' ? (
-                <Grid
-                  item
-                  className="profileAction"
-                  style={{ marginRight: '200px' }}
-                >
+                <Grid item className="profileAction">
                   <Button
                     fullWidth
                     variant="contained"
+                    className="edit_profile"
                     style={{
-                      backgroundColor: theme.palette.orange.main,
-                      // color: 'white',
+                      backgroundColor: theme.palette.primary.main,
+                      color: 'white',
                     }}
                     onClick={() => profileAction('yo')}
                   >
@@ -454,12 +482,14 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
             <Bio type={type} bio={bio} setBio={setBio} />
           </>
         ) : (
-          <Grid container xs={12} item style={{ margin: '50px 10px' }}>
-            <Grid
-              item
-              xs={12}
-              style={{ padding: '10px', border: '1px solid black' }}
-            >
+          <Grid
+            container
+            xs={12}
+            item
+            justify="center"
+            style={{ margin: '50px 30px', width: '90% !important' }}
+          >
+            <Grid item xs={12} className="history">
               <History user={user} newHistory={newHistory} />
             </Grid>
           </Grid>
@@ -484,7 +514,12 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
         to="/edit-profile"
         style={{ display: 'none' }}
       />
-      <NavLink ref={showProfileRef} to="/profile" style={{ display: 'none' }} />
+      <NavLink
+        ref={showProfileRef}
+        to="/profile"
+        style={{ display: 'none' }}
+        id="to_profile"
+      />
     </Grid>
   )
 }

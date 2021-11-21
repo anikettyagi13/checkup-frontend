@@ -18,10 +18,10 @@ export default function TimeLineBlock({
       sm={5}
       xs={12}
       className="timelineBlock"
-      style={{ backgroundColor: theme.palette.yellow.main }}
+      // style={{ backgroundColor: theme.palette.yellow.main }}
     >
-      <Grid item>
-        <Typography variant="h3">AVAILABILITY</Typography>
+      <Grid item xs={12} className="center">
+        <Typography className="h3">Availability</Typography>
         {type === 'edit' ? (
           <TextField
             variant="filled"
@@ -30,7 +30,7 @@ export default function TimeLineBlock({
             onChange={(e) => setDays(e.target.value)}
           />
         ) : (
-          <Typography variant="body1">Days -> {days}</Typography>
+          <Typography className="body">Days -> {days}</Typography>
         )}
         {type === 'edit' ? (
           <>
@@ -42,13 +42,13 @@ export default function TimeLineBlock({
               value={timeing}
               onChange={(e) => setTimeing(e.target.value)}
             />
-            <Typography variant="subtitle1">
+            <Typography className="subtitle1">
               Comma seprated if multiple times are available for eg: 11AM-12AM,
               5PM-6PM
             </Typography>
           </>
         ) : (
-          <Time timeline={k} />
+          <Typography className="body">Time-: {timeing}</Typography>
         )}
       </Grid>
     </Grid>

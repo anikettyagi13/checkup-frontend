@@ -8,7 +8,7 @@ body {
 
 .h4 {
   font-family: 'Poppins' !important;
-  color: #1b3038 !important;
+  color: #1f4f6b !important;
   font-size: 1.5rem !important;
   font-weight: 600 !important;
 }
@@ -40,6 +40,12 @@ body {
   bottom: 0px;
   height: 30px;
 }
+.show600 {
+  display: none;
+}
+.flex {
+  display: flex;
+}
 @media (max-width: 1000px) {
   html {
     font-size: 14px !important;
@@ -52,5 +58,8 @@ body {
   }
   .hidden600 {
     display: none;
+  }
+  .show600 {
+    display: block;
   }
 }

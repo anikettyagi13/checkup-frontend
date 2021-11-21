@@ -9,6 +9,7 @@ import { FormGroup, TextField } from '@mui/material'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import theme from '../../Theme'
+import Loading from '../../utils/Loading'
 
 export default function SignUpMain({
   name,
@@ -20,6 +21,8 @@ export default function SignUpMain({
   accountType,
   setAccountType,
   SignUpClick,
+  path,
+  buttonClick,
 }) {
   const [viewPassword, setViewPassword] = useState(false)
   return (
@@ -43,6 +46,7 @@ export default function SignUpMain({
           label="Name"
           variant="standard"
           fullWidth
+          autoFocus
           value={name}
           onChange={(e) => setName(e.target.value)}
           InputProps={{
@@ -134,17 +138,20 @@ export default function SignUpMain({
         <Button
           variant="contained"
           style={{
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: buttonClick
+              ? theme.palette.dark.main
+              : theme.palette.primary.main,
             color: 'white',
             padding: '10px 50px',
           }}
           onClick={SignUpClick}
+          disabled={buttonClick}
         >
-          Signup
+          {buttonClick ? <Loading width="50" stroke="16" /> : <>SignUp</>}
         </Button>
       </Grid>
       <Typography style={{ marginTop: '15px' }} className="subtitle1">
-        Already have an account? <Link to="/login">Login</Link>
+        Already have an account? <Link to={`/login?path=${path}`}>Login</Link>
       </Typography>
     </Grid>
   )
