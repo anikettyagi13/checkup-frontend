@@ -39,6 +39,7 @@ navigator.getUserMedia =
   navigator.getUserMedia ||
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia
+let boolean = false
 export default function Communication({ properties, user }) {
   const [appointment, setAppointment] = useState(
     properties.location.appointment ? properties.location.appointment : {},
@@ -159,30 +160,29 @@ export default function Communication({ properties, user }) {
   }, [value])
   useEffect(() => {
     async function callApi() {
-      console.log(properties)
       if (!properties.location.appointment) {
-        console.log('ko')
         await getAppointmentInfo()
       } else {
         await getAppointmentInfo()
       }
     }
     callApi()
-    console.log('asasd')
+    setTimeout(() => {
+      if (!boolean) {
+        setInfo('Some Error Occured! Reloading might help')
+        setInfoOpen(true)
+      }
+    }, 20000)
   }, [])
   // Make sure to install the necessary dependencies
 
-  console.log('asd')
   // Set the log level and output
   setLogLevel('verbose')
-  AzureLogger.log = (...args) => {
-    console.log(...args)
-  }
+  AzureLogger.log = (...args) => {}
   useEffect(() => {
     if (selfToken.token) intializeCallFunction()
   }, [selfToken])
   function UserInfo(data) {
-    console.log(data)
     if (data.data) {
       setUserInfo(data.data)
       setRinging1(true)
@@ -197,12 +197,10 @@ export default function Communication({ properties, user }) {
       let tokenCredential = new AzureCommunicationTokenCredential(
         selfToken.token.trim(),
       )
-      console.log(selfToken)
       deviceManager = await callClient.getDeviceManager()
       await deviceManager.askDevicePermission({ video: true })
       await deviceManager.askDevicePermission({ audio: true })
       callAgent = await callClient.createCallAgent(tokenCredential)
-      console.log(callAgent)
       // Set up a camera device to use.
 
       // Listen for an incoming call to accept.
@@ -214,6 +212,7 @@ export default function Communication({ properties, user }) {
           console.error(error)
         }
       })
+      boolean = true
       setStartButtonDisabled(false)
     } catch (error) {
       setInfo('Some Error Occured! Reloading might help')
@@ -232,7 +231,6 @@ export default function Communication({ properties, user }) {
         { videoOptions },
       )
       async function ringing() {
-        console.log('rinnarfijgmdlkijg;kdsjfk', anotherToken.user_id)
         await apiRequest('post', '/api/create_notification', fake, {
           session_id: localStorage.getItem('session_id'),
           to: anotherToken.user_id,
@@ -285,31 +283,24 @@ export default function Communication({ properties, user }) {
   const subscribeToCall = (call) => {
     try {
       // Inspect the initial call.id value.
-      console.log(`Call Id: ${call.id}`)
       //Subsribe to call's 'idChanged' event for value changes.
       call.on('idChanged', () => {
-        console.log(`Call Id changed: ${call.id}`)
+        // console.log(`Call Id changed: ${call.id}`)
       })
 
       // Inspect the initial call.state value.
-      console.log(`Call state: ${call.state}`)
       // Subscribe to call's 'stateChanged' event for value changes.
       call.on('stateChanged', async () => {
-        console.log(`Call state changed: ${call.state}`)
         if (call.state === 'Connected') {
           // connectedLabel.hidden = false
           setAcceptButtonDisabled(true)
           setHangupButtonDisabled(false)
           setLocalVideo(false)
-          console.log('yoooooo connected')
         } else if (call.state === 'Disconnected') {
           setStartButtonDisabled(false)
           setHangupButtonDisabled(true)
           setLocalVideo(true)
           setVideoOpen(false)
-          console.log(
-            `Call ended, call end reason={code=${call.callEndReason.code}, subCode=${call.callEndReason.subCode}}`,
-          )
         }
       })
 
@@ -350,7 +341,6 @@ export default function Communication({ properties, user }) {
   const subscribeToRemoteParticipant = (remoteParticipant) => {
     try {
       // Inspect the initial remoteParticipant.state value.
-      console.log(`Remote participant state: ${remoteParticipant.state}`)
       // Subscribe to remoteParticipant's 'stateChanged' event for value changes.
       remoteParticipant.on('stateChanged', () => {
         console.log(
@@ -420,7 +410,6 @@ export default function Communication({ properties, user }) {
 
   const StartVideoClick = async () => {
     try {
-      console.log(videoOpen, videoRef)
       if (!videoOpen) {
         if (localVideo) {
           navigator.mediaDevices
@@ -437,7 +426,6 @@ export default function Communication({ properties, user }) {
           const localVideoStream = await createLocalVideoStream()
           await call.startVideo(localVideoStream)
         }
-        console.log('asdasdasdjasdknk;')
         setVideoOpen(true)
       } else {
         if (localVideo) {
@@ -467,12 +455,10 @@ export default function Communication({ properties, user }) {
   }
   // Remove your local video stream preview from your UI
   const createLocalVideoStream = async () => {
-    console.log(deviceManager)
     const camera = (await deviceManager.getCameras())[0]
     if (camera) {
       return new LocalVideoStream(camera)
     } else {
-      console.error(`No camera device found on the system`)
     }
   }
   const removeLocalVideoStream = async () => {
@@ -515,25 +501,26 @@ export default function Communication({ properties, user }) {
 
   async function fileUpload() {
     let storageAccount = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT
-    console.log(storageAccount)
     const id = genrateRandomToken()
-    console.log(historyFile)
-    if (historyName === '' || historyFile === '') {
+    if (historyName === '' || historyFile === undefined) {
+      setInfo('Input name of the file and select file to upload')
+      setInfoOpen(true)
+    } else {
+      await uploadFile(historyFile, id, 'pdf', appointment.user_id)
+      const time = new Date()
+      const body = {
+        name: historyName,
+        info: historyInfo,
+        link: `https://${storageAccount}.blob.core.windows.net/${appointment.user_id}/${id}.pdf`,
+        timestamp: time.getTime(),
+        user_id: appointment.user_id,
+      }
+      await apiRequest('post', '/api/create_history', fake, body)
+      setHistoryFile()
+      setHistoryInfo('')
+      setHistoryName('')
+      setOpenHistory(false)
     }
-    await uploadFile(historyFile, id, 'pdf', appointment.user_id)
-    const time = new Date()
-    const body = {
-      name: historyName,
-      info: historyInfo,
-      link: `https://${storageAccount}.blob.core.windows.net/${appointment.user_id}/${id}.pdf`,
-      timestamp: time.getTime(),
-      user_id: appointment.user_id,
-    }
-    await apiRequest('post', '/api/create_history', fake, body)
-    setHistoryFile()
-    setHistoryInfo('')
-    setHistoryName('')
-    setOpenHistory(false)
   }
   function getHistoryFile(e) {
     setHistoryFile(e.target.files[0])
@@ -551,7 +538,7 @@ export default function Communication({ properties, user }) {
         open={openHistory}
         setOpen={setOpenHistory}
         saveChanges={() => fileUpload()}
-        title=""
+        title="Patient History"
       >
         <Grid container>
           <Grid
@@ -566,6 +553,7 @@ export default function Communication({ properties, user }) {
                 label="name"
                 fullWidth
                 value={historyName}
+                variant="standard"
                 onChange={(e) => setHistoryName(e.target.value)}
               />
             </Grid>

@@ -20,13 +20,11 @@ export default function History({ user, newHistory }) {
   useEffect(() => {
     if (value && value.data) {
       setHistory(value.data)
-      console.log(value.data)
     }
   }, [value])
   useEffect(() => {
     if (value2 && value2.data) {
       setAvailability(value2.data)
-      console.log(value2.data)
     }
   }, [value2])
   useEffect(() => {
@@ -45,7 +43,6 @@ export default function History({ user, newHistory }) {
       yo()
     } catch (e) {
       console.error('NOT LOGGED IN')
-      console.log(e)
     }
   }, [])
   function deleted(i) {
@@ -63,7 +60,6 @@ export default function History({ user, newHistory }) {
     if (newHistory.length > 0) {
       const k = [...history]
       k.unshift(newHistory[0])
-      console.log(k)
       setHistory(k)
     }
   }, [newHistory])

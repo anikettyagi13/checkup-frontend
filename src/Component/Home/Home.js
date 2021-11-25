@@ -48,7 +48,13 @@ export default function Home({ user }) {
       <Grid container item xs={12} className="screen">
         <SecondScreen />
       </Grid>
-      <Grid container item xs={12} className="screen">
+      <Grid
+        container
+        item
+        xs={12}
+        className="screen"
+        style={{ marginTop: '100px' }}
+      >
         <ThirdScreen />
       </Grid>
       <Grid container item xs={12}>

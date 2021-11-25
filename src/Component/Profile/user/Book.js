@@ -8,8 +8,6 @@ import { apiRequest } from '../../../utils/utils'
 
 export default function Book({ openBooking, setOpenBooking, doc, user }) {
   const [value, changes] = useState()
-  console.log(doc)
-  console.log(user)
   const [bookings, setBookings] = useState([])
   const loginRef = createRef(null)
   useEffect(() => {
@@ -48,7 +46,7 @@ export default function Book({ openBooking, setOpenBooking, doc, user }) {
   }, [doc])
   return (
     <>
-      <BuildDailog open={openBooking} setOpen={setOpenBooking}>
+      <BuildDailog open={openBooking} setOpen={setOpenBooking} title="BOOK">
         <Schedular
           setOpen={setOpenBooking}
           bookings={bookings}

@@ -8,7 +8,11 @@ export default function AcceptCall({ user, setRinging, AcceptButtonClick }) {
           <Grid container item xs={12} alignItems="center">
             <Grid item>
               <img
-                src={user && user.user && user.user.profile}
+                src={
+                  user && user.user && user.user.profile
+                    ? user && user.user && user.user.profile
+                    : 'https://img.icons8.com/ios/50/000000/administrator-male--v1.png'
+                }
                 style={{
                   height: '40px !important',
                   width: '40px',
@@ -22,7 +26,7 @@ export default function AcceptCall({ user, setRinging, AcceptButtonClick }) {
               style={{
                 textDecoration: 'none',
                 color: '#1b3038',
-                marginLeft: '10px',
+                marginLeft: '30px',
               }}
             >
               {user && user.user && user.user.name}

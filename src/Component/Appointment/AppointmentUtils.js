@@ -11,7 +11,6 @@ export default function AppointmentUtils({ appointment, User, prev }) {
   const communicationRef = createRef()
   useEffect(() => {
     if (value && value.data) {
-      console.log(value.data)
       setUser(value.data)
     }
   }, [value])

@@ -29,7 +29,6 @@ export default function Profile({ user, setUser, type, url }) {
     load()
   }, [url])
   useEffect(() => {
-    console.log(user, 'users######################')
     if (!(user && user.type && user.user.id)) {
       LoginRef.current.click()
     }
@@ -44,7 +43,6 @@ export default function Profile({ user, setUser, type, url }) {
   return (
     <>
       {userInfo && userInfo.type !== undefined ? (
-        // console.log('yo')
         <ProfileMain
           user={userInfo}
           setUser={setUserInfo}

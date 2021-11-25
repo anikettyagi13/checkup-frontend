@@ -16,12 +16,9 @@ export default function Schedular({
   readOnly,
 }) {
   let data = [...bookings]
-  console.log(data)
   function find(r) {
-    console.log(data, r)
     let k = 1
     data.map((book) => {
-      console.log(book.Id == r.Id)
       if (book.Id == r.Id) {
         k = 0
       }
@@ -56,7 +53,6 @@ export default function Schedular({
     k.push({ ...yo.data, read: true })
     data = k
     setOpen(false)
-    console.log(data)
   }
   function editorTemplate(props) {
     return props !== undefined ? (
@@ -152,7 +148,7 @@ export default function Schedular({
         }}
       >
         <Grid item>
-          <Typography style={{ padding: '30px' }} variant="h3">
+          <Typography style={{ padding: '30px' }} variant="h5">
             BOOKINGS
           </Typography>
         </Grid>

@@ -18,7 +18,6 @@ export default function Loading({ width, stroke, color }) {
       direction: 'alternate',
       loop: true,
     })
-    console.log('yoo')
   }, [])
   return (
     <div

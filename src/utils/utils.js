@@ -50,7 +50,6 @@ export function genrateRandomToken() {
 export async function uploadFile(file, fileName, fileType, container) {
   let sasToken = process.env.REACT_APP_AZURE_STORAGE_SAS
   let storageAccount = process.env.REACT_APP_AZURE_STORAGE_ACCOUNT
-  console.log(container, fileName)
   const blobService = new BlobServiceClient(
     `https://${storageAccount}.blob.core.windows.net/?${sasToken}`,
   )
@@ -64,4 +63,10 @@ export async function uploadFile(file, fileName, fileType, container) {
   const options = { blobHTTPHeader: { blobContentType: fileType } }
 
   await blobClient.uploadBrowserData(file, options)
+}
+
+export function validateEmail(email) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
 }

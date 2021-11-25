@@ -98,7 +98,13 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
       saveProfile(this)
       setSaveLoading(true)
     } else if (type === 'info' && user.type === 'doctor') {
-      setOpenBooking(true)
+      if (loggedIn && loggedIn.type === 'doctor') {
+        setOpenSnackbar(true)
+        setError({
+          error:
+            "Doctors can't book appointments as of now! Please try Again Later",
+        })
+      } else setOpenBooking(true)
     }
   }
   useEffect(() => {
@@ -134,7 +140,6 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
   }
   function useless() {}
   const saveProfile = async (ref) => {
-    console.log(ref)
     const u = { ...user }
     u.user['hospital'] = hospital
     u.user['bio'] = bio
@@ -227,7 +232,6 @@ export default function ProfileMain({ user, setUser, type, loggedIn }) {
         setOpenSnackbar(true)
         return
       }
-      console.log(id, user)
       await uploadFile(historyFile, id, 'pdf', user.user.id)
       const time = new Date()
 

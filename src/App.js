@@ -123,6 +123,7 @@ function App() {
           <Navigation
             user={user}
             setUser={setUser}
+            setLoading={setLoading}
             socket={socket}
             AppointmentRef={AppointmentRef}
             message={message}

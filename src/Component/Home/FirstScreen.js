@@ -46,8 +46,8 @@ export default function FirstScreen({ user, setInfo, setOpen }) {
             marginTop: '30px',
           }}
           onClick={() => {
-            console.log(user)
-            if (!(user && user.user.type)) SignUpRef.current.click()
+            if (!(user && user.user && user.user.type))
+              SignUpRef.current.click()
             else {
               setInfo('User Already Logged In!')
               setOpen(true)

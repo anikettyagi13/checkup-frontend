@@ -15,7 +15,7 @@ export default function ForthScreen() {
       className="screen"
       alignItems="center"
       alignContent="center"
-      style={{ marginBottom: '100px' }}
+      style={{ marginTop: '100px', marginBottom: '100px' }}
     >
       <Grid
         item

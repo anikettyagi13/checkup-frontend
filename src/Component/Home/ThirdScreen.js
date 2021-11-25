@@ -6,9 +6,13 @@ import img from '../../assets/add_history.svg'
 import theme from '../../Theme'
 
 export default function ThirdScreen() {
-  const ProfileRef = createRef(null)
   return (
     <Grid container item xs={12} alignItems="center">
+      <Link
+        to={'/profile?path=/'}
+        style={{ display: 'none' }}
+        id="profileref"
+      />
       <Grid container item md={6} xs={12} justify="center">
         <Grid item xs={8} className="hideWhenSmall hidden animateBlock2">
           <Typography className="h3">Add Medical History</Typography>
@@ -23,6 +27,9 @@ export default function ThirdScreen() {
               //   width: '200px',
               color: 'white',
               marginTop: '20px',
+            }}
+            onClick={() => {
+              document.getElementById('profileref').click()
             }}
           >
             Build Your Profile
@@ -57,19 +64,16 @@ export default function ThirdScreen() {
               backgroundColor: theme.palette.secondary.main,
               padding: '15px',
               marginTop: '20px',
-
-              //   width: '200px',
               color: 'white',
             }}
             onClick={() => {
-              ProfileRef.current.click()
+              document.getElementById('profileref').click()
             }}
           >
             Build Your Profile
           </Button>
         </Grid>
       </Grid>
-      <Link to={'/profile'} style={{ display: 'none' }} ref={ProfileRef} />
     </Grid>
   )
 }

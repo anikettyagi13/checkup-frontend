@@ -8,7 +8,6 @@ export default function Availability({ avail, deleteAvailbility }) {
   const [info, setInfo] = useState({})
   const [value, changes] = useState()
   useEffect(() => {
-    console.log(value)
     if (value && value.data) {
       setInfo(value.data)
     }

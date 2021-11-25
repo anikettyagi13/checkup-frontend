@@ -120,7 +120,6 @@ export default function NavBar({ user, setUser }) {
         <div className="search">
           <Search
             onClick={() => {
-              console.log('sfkp')
               setSearchOpen(true)
             }}
           >

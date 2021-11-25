@@ -1,3 +1,4 @@
 export const NavigationReference = {
-  api: 'http://localhost:5000',
+  api: 'https://checkuphospitalbackend.azurewebsites.net',
+  // api: 'http://localhost',
 }

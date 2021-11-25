@@ -9,6 +9,7 @@ import Login from '../Component/Credentials'
 import NavBar from '../Component/NavBar'
 import Profile from '../Component/Profile/Profile'
 import Search from '../Component/Search/Search'
+import img from '../assets/logo.svg'
 
 export default function Navigation({
   user,
@@ -98,9 +99,31 @@ export default function Navigation({
         />
       </Switch>
       <Divider style={{ marginTop: '20px' }} />
-      <Grid container justify="center" alignContent="center" className="bottom">
-        <Grid item>
-          <Typography className="subtitle1"> © CHECK UP 2021</Typography>
+      <Grid
+        container
+        style={{ padding: '50px' }}
+        alignContent="center"
+        justify="center"
+        className="bottom"
+      >
+        <Grid
+          item
+          alignItems="center"
+          alignContent="center"
+          style={{ marginRight: '80px' }}
+        >
+          <img src={img} alt="logo" style={{ width: '80px', height: '50px' }} />
+          <Typography
+            className="subtitle1"
+            style={{
+              display: 'inline',
+              marginTop: '15px',
+              marginLeft: '10px',
+              position: 'absolute',
+            }}
+          >
+            © Aniket Tyagi 2021
+          </Typography>
         </Grid>
       </Grid>
     </>

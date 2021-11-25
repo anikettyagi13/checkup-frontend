@@ -7,7 +7,7 @@ import './login.css'
 import React, { useEffect, createRef } from 'react'
 import Snackbar from '@mui/material/Snackbar'
 import MuiAlert from '@mui/material/Alert'
-import { apiRequest, uuidv4 } from '../../utils/utils'
+import { apiRequest, uuidv4, validateEmail } from '../../utils/utils'
 import LoginMain from './LoginMain'
 import img from '../../assets/doctors.svg'
 import SignUpMain from './SignUpMain'
@@ -38,7 +38,6 @@ export default function Login({ user, setUser, type }) {
     animateBlock()
   }, [])
   useEffect(() => {
-    console.log('kaosfdkpo', user)
     if (user && user.type) {
       homeRef.current.click()
     }
@@ -57,10 +56,6 @@ export default function Login({ user, setUser, type }) {
         setError(value.data.error)
         setOpen(true)
       } else {
-        console.log(
-          'afjiojfasiojdioafjioasdfjioasjf;ajsdfajsdfanjfnafansdjfuijamsd;fkmj',
-          value.data,
-        )
         if (value.data.id) {
           localStorage.setItem(
             'session_id',
@@ -80,9 +75,9 @@ export default function Login({ user, setUser, type }) {
 
   async function LoginClick() {
     setButtonClick(true)
-    if (email.length === 0 || password.length === 0) {
+    if (email.length === 0 || password.length === 0 || !validateEmail(email)) {
       setOpen(true)
-      setError('Please Fill in the details!')
+      setError('Please fill in correct details!')
       setButtonClick(false)
     } else {
       const obj = { email, password }
@@ -91,9 +86,14 @@ export default function Login({ user, setUser, type }) {
   }
   async function SignUpClick() {
     setButtonClick(true)
-    if (email.length === 0 || password.length === 0 || name.length === 0) {
+    if (
+      email.length === 0 ||
+      password.length === 0 ||
+      name.length === 0 ||
+      !validateEmail(email)
+    ) {
       setOpen(true)
-      setError('Please Fill in the details!')
+      setError('Please fill in correct  details!')
       setButtonClick(false)
     } else {
       const id = uuidv4()
