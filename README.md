@@ -30,4 +30,4 @@ CheckUp is a website application that utilizes Internet capabilities to bring pa
 
 ---
 ## BACKEND -:
-Find Back-End repository at [CHECKUP-FRONTEND](https://github.com/anikettyagi13/checkup-backend)
+Find Back-End repository at [CHECKUP-BACKEND](https://github.com/anikettyagi13/checkup-backend)
