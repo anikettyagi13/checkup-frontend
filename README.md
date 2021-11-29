@@ -1,70 +1,33 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CHECKUP 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/52878122/143916441-a9331af1-2067-411d-8d69-5f1e00d4df36.gif" />
+</p>
 
-## Available Scripts
+* [Website](https://checkuphospital.azurewebsites.net/)
 
-In the project directory, you can run:
+CheckUp is a website application that utilizes Internet capabilities to bring patients and doctors together form all around the world. Patients gets an opportunity to get themselves diagnosed with best doctors removing the barrier of distance. Our mission is no one should left behind and everyone gets the best medication and care that they deserve.
 
-### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
+### Key Features-:
+* Appointment -: With our Built-in Scheduler, patients will be able book a 30-minute appointment with any doctor from around the world.
+* Remote Diagnosis -: After booking an appointment, patients and doctors would be able to connect with each other remotely via video calling facility powered by Azure Communication Services. 
+* Patient's History -: Patient will be free to share their history with doctors (access could be removed). Patient's health is our priority, on uploading the history once, history cannot be deleted. Doctors can share their prescriptions on the patient history panel after the appointment has ended.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Benefits -:
+* This platform will help patients connect to the best doctors from all around the world.
+* Patients will be able to receive the best treatment possible with all the history readily available with the doctor.
+* Saves time, and energy.
+* Provides easy access to both patients and doctors. 
+* Prevents spreading of contagious diseases by removing physical contact.
 
-### `yarn test`
+---
+## Frontend -: 
+1. Clone the repository
+2. Install all the necessary modules with `npm install`.
+3. In the `src/Navigation/NavigationReference.js` change the api as per your requirements.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+## BACKEND -:
+Find Back-End repository at [CHECKUP-FRONTEND](https://github.com/anikettyagi13/checkup-backend)
